@@ -28,11 +28,13 @@ export async function proxy(request: NextRequest) {
     if (pathname !== "/login" && !accessToken) {
         await deleteCookie("accessToken");
         await deleteCookie("refreshToken");
+        await deleteCookie("userRole");
         return NextResponse.redirect(new URL('/login', request.url));
-        
     }
-    
-    userRole="USER";
+
+    // Get user role from cookie (set during login)
+    const roleFromCookie = await getCookie("userRole");
+    userRole = roleFromCookie as UserRole;
 
     const routerOwner = getRouteOwner(pathname);
     const isAuth = isAuthRoute(pathname);

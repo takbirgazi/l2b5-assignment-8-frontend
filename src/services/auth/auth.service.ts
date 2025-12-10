@@ -4,6 +4,7 @@ import { verifyAccessToken } from "@/lib/jwtHanlders";
 import { serverFetch } from "@/lib/server-fetch";
 import { parse } from "cookie";
 import { deleteCookie, getCookie, setCookie } from "./tokenHandlers";
+import { UserRole } from "@/lib/auth-utils";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -88,6 +89,19 @@ export async function getNewAccessToken() {
             path: refreshTokenObject.Path || "/",
             sameSite: refreshTokenObject['SameSite'] || "none",
         });
+
+        // Update user role cookie from the refreshed access token
+        const tokenVerification = await verifyAccessToken(accessTokenObject.accessToken);
+        if (tokenVerification.success && tokenVerification.payload?.role) {
+            await deleteCookie("userRole");
+            await setCookie("userRole", tokenVerification.payload.role as UserRole, {
+                secure: true,
+                httpOnly: true,
+                maxAge: 1000 * 60 * 60,
+                path: "/",
+                sameSite: "none",
+            });
+        }
 
         if (!result.success) {
             throw new Error(result.message || "Token refresh failed");

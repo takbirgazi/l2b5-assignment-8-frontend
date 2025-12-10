@@ -39,8 +39,6 @@ export const loginUser = async (_currentState: any, formData: any): Promise<any>
 
         const result = await res.json();
 
-        console.log("Result: ", result)
-
         // Get tokens from Set-Cookie headers (like refresh token logic)
         const setCookieHeaders = res.headers.getSetCookie();
 
@@ -67,6 +65,14 @@ export const loginUser = async (_currentState: any, formData: any): Promise<any>
             throw new Error("Tokens not found in response");
         }
 
+        // Obtain user role from result.data.user directly
+        const userFromResponse = result.data?.user;
+        if (!userFromResponse || !userFromResponse.role) {
+            throw new Error("User role not found in response");
+        }
+
+        const userRole: UserRole = userFromResponse.role;
+
         // Set tokens as cookies
         await setCookie("accessToken", accessTokenObject as string, {
             secure: true,
@@ -84,13 +90,14 @@ export const loginUser = async (_currentState: any, formData: any): Promise<any>
             sameSite: "none",
         });
 
-        // Obtain user role from result.data.user directly
-        const userFromResponse = result.data?.user;
-        if (!userFromResponse || !userFromResponse.role) {
-            throw new Error("User role not found in response");
-        }
-
-        const userRole: UserRole = userFromResponse.role;
+        // Set user role as cookie for proxy middleware
+        await setCookie("userRole", userRole, {
+            secure: true,
+            httpOnly: true,
+            maxAge: 1000 * 60 * 60,
+            path: "/",
+            sameSite: "none",
+        });
 
         if (!result.success) {
             throw new Error(result.message || "Login failed");
