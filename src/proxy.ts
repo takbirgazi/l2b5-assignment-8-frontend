@@ -1,11 +1,8 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { getDefaultDashboardRoute, getRouteOwner, isAuthRoute, UserRole } from './lib/auth-utils';
 import { getNewAccessToken } from './services/auth/auth.service';
 import { deleteCookie, getCookie } from './services/auth/tokenHandlers';
-
-
 
 export async function proxy(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
@@ -25,31 +22,25 @@ export async function proxy(request: NextRequest) {
         return NextResponse.redirect(url);
     }
 
-
     const accessToken = await getCookie("accessToken") || null;
 
     let userRole: UserRole | null = null;
-    if (accessToken) {
-        const verifiedToken: JwtPayload | string = jwt.verify(accessToken, process.env.JWT_SECRET as string);
-
-        if (typeof verifiedToken === "string") {
-            await deleteCookie("accessToken");
-            await deleteCookie("refreshToken");
-            return NextResponse.redirect(new URL('/login', request.url));
-        }
-
-        userRole = verifiedToken.role;
+    if (pathname !== "/login" && !accessToken) {
+        await deleteCookie("accessToken");
+        await deleteCookie("refreshToken");
+        return NextResponse.redirect(new URL('/login', request.url));
+        
     }
+    
+    userRole="USER";
 
     const routerOwner = getRouteOwner(pathname);
+    const isAuth = isAuthRoute(pathname);
 
-    const isAuth = isAuthRoute(pathname)
-
-    // Rule 1 : User is logged in and trying to access auth route. Redirect to default dashboard
+    // Rule 1: User is logged in and trying to access auth route. Redirect to default dashboard
     if (accessToken && isAuth) {
-        return NextResponse.redirect(new URL(getDefaultDashboardRoute(userRole as UserRole), request.url))
+        return NextResponse.redirect(new URL(getDefaultDashboardRoute(userRole as UserRole), request.url));
     }
-
 
     if (routerOwner === null) {
         return NextResponse.next();
@@ -65,17 +56,14 @@ export async function proxy(request: NextRequest) {
         return NextResponse.next();
     }
 
-   
     if (routerOwner === "SUPER_ADMIN" || routerOwner === "AGENT" || routerOwner === "USER") {
         if (userRole !== routerOwner) {
-            return NextResponse.redirect(new URL(getDefaultDashboardRoute(userRole as UserRole), request.url))
+            return NextResponse.redirect(new URL(getDefaultDashboardRoute(userRole as UserRole), request.url));
         }
     }
 
     return NextResponse.next();
 }
-
-
 
 export const config = {
     matcher: [

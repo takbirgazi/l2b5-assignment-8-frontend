@@ -2,45 +2,22 @@
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import Password from "@/components/ui/password.originui";
-import { useForm } from "react-hook-form";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-// import { useLoginMutation } from "@/redux/features/auth/auth.api";
-import { useRouter } from "next/navigation";
+
 import Link from "next/link";
-
-
-const loginSchema = z.object({
-    email: z.email(),
-    password: z.string().min(6, { error: "Password minimum 6 character" }),
-})
+import { useActionState, useEffect } from "react";
+import { loginUser } from "@/services/auth/loginUser";
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 
 export function LoginForm() {
-    // const [login] = useLoginMutation();
-    const router = useRouter();
-    const form = useForm({
-        resolver: zodResolver(loginSchema),
-        defaultValues: {
-            email: "",
-            password: ""
-        }
-    });
+    
+    const [state, formAction, isPending] = useActionState(loginUser, null);
 
-    const onSubmit = async (data: z.infer<typeof loginSchema>) => {
-        const tostId = toast.loading("Logging in...");
-        try {
-            // await login(data).unwrap();
-            router.push("/");
-            toast.success("Login Successfully!", { id: tostId });
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (err: any) {
-            console.error(err);
-            toast.error("Something went wrong! Please try again.", { id: tostId });
-        }
-    }
+    useEffect(() => {
+      if (state && !state.success && state.message) {
+        toast.error(state.message);
+      }
+    }, [state]);
 
     return (
         <div className={cn("flex flex-col gap-6")}>
@@ -51,45 +28,45 @@ export function LoginForm() {
                 </p>
             </div>
             <div className="grid gap-6">
-
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-                        <FormField
-                            control={form.control}
+                <form action={formAction} className="space-y-5">
+                    <FieldGroup>
+                        <div className="grid grid-cols-1 gap-4">
+                        {/* Email */}
+                        <Field>
+                            <FieldLabel htmlFor="email">Email</FieldLabel>
+                            <Input
+                            id="email"
                             name="email"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Email</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Enter Your Email" type="email" {...field} />
-                                    </FormControl>
-                                    <FormDescription className="sr-only">
-                                        This is your email address.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="password"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Password</FormLabel>
-                                    <FormControl>
-                                        <Password {...field} />
-                                    </FormControl>
-                                    <FormDescription className="sr-only">
-                                        This is your password.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                            type="email"
+                            placeholder="domain@example.com"
+                            //   required
+                            />
 
-                        <Button type="submit" variant="secondary" className="w-full cursor-pointer">Log In</Button>
-                    </form>
-                </Form>
+                            {/* <InputFieldError field="email" state={state} /> */}
+                        </Field>
+
+                        {/* Password */}
+                        <Field>
+                            <FieldLabel htmlFor="password">Password</FieldLabel>
+                            <Input
+                            id="password"
+                            name="password"
+                            type="password"
+                            placeholder="Enter your password"
+                            //   required
+                            />
+                            {/* <InputFieldError field="password" state={state} /> */}
+                        </Field>
+                        </div>
+                        <FieldGroup className="mt-4">
+                        <Field>
+                            <Button className="cursor-pointer" type="submit" disabled={isPending}>
+                            {isPending ? "Logging in..." : "Login"}
+                            </Button>
+                        </Field>
+                        </FieldGroup>
+                    </FieldGroup>
+                </form>
             </div>
             <div className="text-center text-sm">
                 Don&apos;t have an account?{" "}
