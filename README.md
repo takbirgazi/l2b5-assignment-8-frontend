@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# No-Cash 💸
 
-## Getting Started
+**No-Cash** is a digital wallet application frontend built with **Next.js, TailwindCSS, Shadcn**. It connects with a backend API to provide users with a secure and seamless virtual money management experience. The platform supports multiple roles — **User, Admin, and Agent** — each with different capabilities.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 Features
+
+* **Cash In** – Add money to wallet via Agent.
+* **Cash Out** – Withdraw money from wallet.
+* **Send Money** – Transfer money between users.
+* **Receive Money** – Get money from another user.
+* **User Dashboard** – Manage balance, transactions, and profile.
+* **Admin Panel** – Manage users, agents, and monitor transactions.
+* **Agent Panel** – Handle Cash In and Cash Out requests.
+* **Authentication & Authorization** – Secure access by roles.
+* **Transaction History** – Detailed records for all operations.
+
+---
+
+## 🛠️ Tech Stack
+
+* **Next.js** – Frontend library
+* **TailwindCSS** – Styling and responsive design
+* **Shadcn** – Styling and responsive design
+
+---
+
+## 📂 Project Structure
+
+```
+l2b5-assignment-8-frontend/
+├── src/
+│   ├── app/
+│   │   ├── (auth)/
+│   │   │   ├── login/
+│   │   │   └── signup/
+│   │   ├── (dashboard)/
+│   │   │   ├── admin/
+│   │   │   ├── agent/
+│   │   │   └── user/
+│   │   ├── about/
+│   │   ├── features/
+│   │   ├── contact/
+│   │   ├── faq/
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   └── globals.css
+│   ├── components/
+│   ├── lib/
+│   ├── hooks/
+│   ├── types/
+│   ├── service/
+│   └── zod/
+├── public/
+├── next.config.js
+├── package.json
+└── tsconfig.json
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚙️ Installation & Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Clone this repository:
 
-## Learn More
+   ```bash
+   git clone https://github.com/takbirgazi/l2b5-assignment-8-frontend
+   ```
+2. Navigate into the project folder:
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   cd l2b5-assignment-8-frontend
+   ```
+3. Install dependencies:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   npm install
+   ```
+4. Create a `.env` file in the root folder and add your backend API URL:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```env
+   NEXT_PUBLIC_BASE_API_URL=http://localhost:5000/api/v1
+   ```
+5. Run the development server:
 
-## Deploy on Vercel
+   ```bash
+   npm run dev
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📖 Usage
+
+### 👤 User
+
+* Register/Login to your account.
+* Cash In via Agent.
+* Send and Receive money.
+* View transaction history.
+
+### 🧑‍💼 Agent
+
+* Approve/Decline **Cash In** requests.
+* Handle **Cash Out** transactions.
+
+### 👨‍💻 Admin
+
+* Manage Users and Agents.
+* Monitor all transactions.
+* Handle system-wide settings.
