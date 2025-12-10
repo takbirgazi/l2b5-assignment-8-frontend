@@ -76,7 +76,7 @@ export default function CommonLayoutHeader() {
                       <NavigationMenuLink
                         asChild
                         className="py-1.5"
-                        active={link.href === window.location.pathname}
+                        // active={link.href === window.location.pathname}
                       >
                         <Link href={link.href}>
                           {link.label}
@@ -107,7 +107,7 @@ export default function CommonLayoutHeader() {
                   <NavigationMenuItem key={index}>
                     <NavigationMenuLink
                       asChild
-                      active={link.href == window.location.pathname}
+                      // active={link.href == window.location.pathname}
                       className="text-muted-foreground hover:text-primary py-1.5 font-medium"
                     >
                       <Link href={link.href}>
