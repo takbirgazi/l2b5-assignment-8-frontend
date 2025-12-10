@@ -1,0 +1,64 @@
+import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import Link from "next/link";
+
+export default function CommonLayoutFooter() {
+    return (
+        <footer className="bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 py-10 px-6">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+
+                {/* Brand Section */}
+                <div>
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">No-Cash</h2>
+                    <p className="mt-2 text-sm">
+                        A smart, secure, and fast digital wallet for everyone.
+                        Manage your money with Cash In, Cash Out, Send & Receive features.
+                    </p>
+                    <div className="flex mt-4 space-x-4">
+                        <Link target="_blank" href="https://www.facebook.com/takbirgazibd" className="hover:text-blue-600"><Facebook size={20} /></Link>
+                        <Link target="_blank" href="https://x.com/takbirgazibd" className="hover:text-blue-400"><Twitter size={20} /></Link>
+                        <Link target="_blank" href="https://www.instagram.com/takbirgazibd/" className="hover:text-pink-600"><Instagram size={20} /></Link>
+                        <Link target="_blank" href="https://www.linkedin.com/in/takbirgazi/" className="hover:text-blue-700"><Linkedin size={20} /></Link>
+                    </div>
+                </div>
+
+                {/* Quick Links */}
+                <div>
+                    <h3 className="text-lg font-semibold mb-3">Quick Links</h3>
+                    <ul className="space-y-2 text-sm">
+                        <li><Link href="/" className="hover:underline">Home</Link></li>
+                        <li><Link href="/about" className="hover:underline">About Us</Link></li>
+                        <li><Link href="/features" className="hover:underline">Features</Link></li>
+                        <li><Link href="/faq" className="hover:underline">FAQs</Link></li>
+                        <li><Link href="/contact" className="hover:underline">Contact</Link></li>
+                    </ul>
+                </div>
+
+                {/* Features */}
+                <div>
+                    <h3 className="text-lg font-semibold mb-3">Features</h3>
+                    <ul className="space-y-2 text-sm">
+                        <li>💸 Cash In & Cash Out</li>
+                        <li>📤 Send & Receive Money</li>
+                        <li>🔒 Secure Transactions</li>
+                        <li>📊 Transaction History</li>
+                        <li>👤 User, Agent & Admin Roles</li>
+                    </ul>
+                </div>
+
+                {/* Contact Info */}
+                <div>
+                    <h3 className="text-lg font-semibold mb-3">Contact Us</h3>
+                    <p className="text-sm">📍 Khulna, Bangladesh</p>
+                    <p className="text-sm">📧 takbirgazibd@gmail.com</p>
+                    <p className="text-sm">📞 +8801811947182</p>
+                    <p className="text-sm mt-2">Available 24/7 for customer support</p>
+                </div>
+            </div>
+
+            {/* Bottom Bar */}
+            <div className="mt-10 border-t border-gray-300 dark:border-gray-700 pt-4 text-center text-sm">
+                © {new Date().getFullYear()} No-Cash. All Rights Reserved.
+            </div>
+        </footer>
+    )
+}
