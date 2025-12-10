@@ -8,7 +8,7 @@ const HomePage = () => {
     return (
         <div className="w-full">
         {/* Hero Section */}
-        <section className="relative flex flex-col items-center justify-center text-center px-6 py-20 bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
+        <section className="relative flex flex-col items-center justify-center text-center px-6 py-20 bg-linear-to-r from-purple-600 to-indigo-600 text-white">
             <h1
                 className="text-5xl font-bold mb-4 hero-title"
             >
