@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useActionState, useEffect } from "react";
 import { loginUser } from "@/services/auth/loginUser";
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 
 export function LoginForm() {
     
