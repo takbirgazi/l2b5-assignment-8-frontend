@@ -7,6 +7,7 @@ import { deleteCookie, getCookie } from './services/auth/tokenHandlers';
 export async function proxy(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
     const hasTokenRefreshedParam = request.nextUrl.searchParams.has('tokenRefreshed');
+    const authPath = ["/","/about", "/contact", "/faq", "/features", "/signup"];
 
     if (hasTokenRefreshedParam) {
         const url = request.nextUrl.clone();
@@ -25,11 +26,22 @@ export async function proxy(request: NextRequest) {
     const accessToken = await getCookie("accessToken") || null;
 
     let userRole: UserRole | null = null;
+    // Allow public (authPath) pages without checks
+    if (authPath.includes(pathname)) {
+        if(pathname == "/signup" && accessToken){
+            const loginUrl = new URL("/", request.url);
+            return NextResponse.redirect(loginUrl);
+        }
+        return NextResponse.next();
+    }
+    // If the path is NOT a public or auth page, and user isn't logged in, clear all tokens and redirect
     if (pathname !== "/login" && !accessToken) {
         await deleteCookie("accessToken");
         await deleteCookie("refreshToken");
         await deleteCookie("userRole");
-        return NextResponse.redirect(new URL('/login', request.url));
+        const loginUrl = new URL("/login", request.url);
+        loginUrl.searchParams.set("redirect", pathname);
+        return NextResponse.redirect(loginUrl);
     }
 
     // Get user role from cookie (set during login)
